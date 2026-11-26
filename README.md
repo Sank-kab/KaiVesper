@@ -117,18 +117,27 @@ Pairs seamlessly with **[KaiVesper-Prep](https://github.com/Sank-kab/KaiVesper-P
 
 On-console FS installation and zero-reboot Hot-Swapping require `ouncebrew/kaihen` compiled with the 3 public FS helper patches from **`nicholasyoannou/switch2-modbridge`** (exposing `HEN_GET_FS_PROCESS` and the `ro:dmnt` FS query/read/write/patch/protect/map ops).
 
+### Option A — 1-Click on Windows (Recommended)
+
+Open **[KaiVesper-Prep](https://github.com/Sank-kab/KaiVesper-Prep)** → **`kaiHEN (Patch & Launch)`** tab:
+1. Click **`Patch & Build kaiHEN`** — automatically downloads `ouncebrew/kaihen` (`20261117.1`) and the 3 `ro:dmnt` patches from `switch2-modbridge`, compiles them via Docker, and creates a ready-to-launch patched `kaiHEN` folder.
+2. Click **`Launch kaiHEN`** — automatically downloads `ns2jb` (`hen.cjs`) and launches your patched `kaiHEN` natively on Windows with a live SmileBASIC `V=START(...)` command banner!
+
+### Option B — Manual CLI Build (Linux / macOS / WSL)
+
 ```bash
-# 1. Clone kaiHEN (20261117.1+) and switch2-modbridge
+# 1. Clone kaiHEN (20261117.1) and switch2-modbridge
 git clone https://github.com/ouncebrew/kaihen.git
 git clone https://github.com/nicholasyoannou/switch2-modbridge.git
 
-# 2. Apply the kaiHEN patches from switch2-modbridge
+# 2. Apply the 3 kaiHEN patches from switch2-modbridge
 cd kaihen
 git checkout 20261117.1
-git apply ../switch2-modbridge/patches/*.patch
+git apply ../switch2-modbridge/kaihen/patches/*.patch
 
-# 3. Build using the ounce-devkit Docker image (follow ouncebrew/kaihen build steps)
-#    then launch your patched kaiHEN build normally (e.g. via hen.cjs)
+# 3. Build using the ounce-devkit Docker image (follow ouncebrew/kaihen build steps),
+#    replace ro/main, hen/main, and bootstrap.bin in your kaiHEN-20261117.1 release folder,
+#    and launch normally (e.g. via ns2jb hen.cjs)
 ```
 
 Once running on Switch 2, open **KaiVesper → Saves & System** and confirm:
