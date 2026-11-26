@@ -48,7 +48,7 @@ Pairs seamlessly with **[KaiVesper-Prep](https://github.com/Sank-kab/KaiVesper-P
 
 ## Requirements
 
-1. **Nintendo Switch 2** running **FW 23.0.1** with **patched `kaiHEN`** (with `ro:dmnt` FS helper operations enabled) and **hbmenu**. *(KaiVesper verifies FS ABI prologues read-only before patching and aborts safely on unsupported firmware.)*
+1. **Nintendo Switch 2** running **FW 23.0.1** with **patched `kaiHEN`** (with `ro:dmnt` FS helper operations enabled — see [Building Patched `kaiHEN`](#building-patched-kaihen-ro-dmnt-fs-helpers) below) and **hbmenu**. *(KaiVesper verifies FS ABI prologues read-only before patching and aborts safely on unsupported firmware.)*
 2. **exFAT-formatted microSD card** (strongly recommended if any `romfs.bin` exceeds 4 GB — FAT32 has a 4 GB single-file limit).
 3. At least one legally installed **Switch 2 (`04...`)** and/or **Switch 1 (`01...`)** title on your console to act as a Host container *(prefer titles marked **`Auto Logo (Best)`** in the Hosts tab)*.
 
@@ -110,6 +110,32 @@ Pairs seamlessly with **[KaiVesper-Prep](https://github.com/Sank-kab/KaiVesper-P
   On-console FS installation and zero-reboot Hot-Swapping require a patched `kaiHEN` build with the `ro:dmnt` FS helper primitives.
 - **Diagnostic Logs:**
   KaiVesper writes readable diagnostic logs to the microSD root (`vesper-install.log`, `vesper-discover.log`, `vesper-save.log`, `vesper-hosts.log`).
+
+---
+
+## Building Patched `kaiHEN` (`ro:dmnt` FS Helpers)
+
+On-console FS installation and zero-reboot Hot-Swapping require `ouncebrew/kaihen` compiled with the 3 public FS helper patches from **`nicholasyoannou/switch2-modbridge`** (exposing `HEN_GET_FS_PROCESS` and the `ro:dmnt` FS query/read/write/patch/protect/map ops).
+
+```bash
+# 1. Clone kaiHEN (20261117.1+) and switch2-modbridge
+git clone https://github.com/ouncebrew/kaihen.git
+git clone https://github.com/nicholasyoannou/switch2-modbridge.git
+
+# 2. Apply the kaiHEN patches from switch2-modbridge
+cd kaihen
+git checkout 20261117.1
+git apply ../switch2-modbridge/patches/*.patch
+
+# 3. Build using the ounce-devkit Docker image (follow ouncebrew/kaihen build steps)
+#    then launch your patched kaiHEN build normally (e.g. via hen.cjs)
+```
+
+Once running on Switch 2, open **KaiVesper → Saves & System** and confirm:
+- **`kaiHEN: Patched kaiHEN Active (Ready)`**
+- Press **`[B]`** to run a safe read-only FS & Save check.
+
+*(Note: Running KaiVesper on stock unpatched `kaiHEN` still works safely in SD-staging mode, but will not perform on-console FS install or zero-reboot Hot-Swap.)*
 
 ---
 
