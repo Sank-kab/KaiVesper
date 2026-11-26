@@ -48,7 +48,7 @@ Pairs seamlessly with **[KaiVesper-Prep](https://github.com/Sank-kab/KaiVesper-P
 
 ## Requirements
 
-1. **Nintendo Switch 2** running **patched `kaiHEN`** (with `ro:dmnt` FS helper operations enabled) and **hbmenu**.
+1. **Nintendo Switch 2** running **FW 23.0.1** with **patched `kaiHEN`** (with `ro:dmnt` FS helper operations enabled) and **hbmenu**. *(KaiVesper verifies FS ABI prologues read-only before patching and aborts safely on unsupported firmware.)*
 2. **exFAT-formatted microSD card** (strongly recommended if any `romfs.bin` exceeds 4 GB — FAT32 has a 4 GB single-file limit).
 3. At least one legally installed **Switch 2 (`04...`)** and/or **Switch 1 (`01...`)** title on your console to act as a Host container *(prefer titles marked **`Auto Logo (Best)`** in the Hosts tab)*.
 
@@ -130,6 +130,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools\gen_assets.ps1
 ```
 
 ---
+
+## Credits & Third-Party Software
+
+- Built with **devkitPro / `libounce` / `libnx`** and **`ouncebrew/kaihen` (`libkaihen`)**.
 
 ## License
 

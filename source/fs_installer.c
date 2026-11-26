@@ -934,6 +934,12 @@ bool vesper_fs_install_or_swap(VesperKaihenCtx* kh,
 
     /* Patch runtime code literals */
     uint8_t* rt_buf = (uint8_t*)calloc(1, rt_bytes);
+    if (!rt_buf) {
+        ifail(logf, err_buf, err_len, "Out of memory allocating runtime buffer.");
+        vesper_fs_discovery_close(&disc);
+        if (logf) fclose(logf);
+        return false;
+    }
     memcpy(rt_buf, VESPER_RT_CODE, VESPER_RT_CODE_SIZE);
     put_u64(rt_buf, VESPER_RT_OFF_RESIDENT_CONTEXT, ctx_addr);
     put_u64(rt_buf, VESPER_RT_OFF_NAMESPACE_CONTEXT, ctx_addr + 368ULL);
@@ -983,6 +989,13 @@ bool vesper_fs_install_or_swap(VesperKaihenCtx* kh,
     }
 
     uint8_t* cur_ctx = (uint8_t*)calloc(1, built_ctx_sz);
+    if (!cur_ctx) {
+        free(ctx_buf);
+        ifail(logf, err_buf, err_len, "Out of memory allocating context read buffer.");
+        vesper_fs_discovery_close(&disc);
+        if (logf) fclose(logf);
+        return false;
+    }
     vesper_fs_read(kh, ctx_addr, cur_ctx, built_ctx_sz);
     rc = vesper_fs_write(kh, ctx_addr, cur_ctx, ctx_buf, built_ctx_sz);
     free(cur_ctx);

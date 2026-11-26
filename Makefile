@@ -11,7 +11,7 @@ PREFIX  := $(DEVKITPRO)/devkitA64/bin/aarch64-none-elf-
 include $(DEVKITPRO)/libounce/switch2_cpu.mk
 
 ARCH    := $(SWITCH2_CPU) -mtp=soft -fPIE
-CFLAGS  := $(ARCH) -std=gnu11 -O2 -Wall -Wextra -Wno-unused-function -Wstack-usage=16384 -ffunction-sections -fdata-sections \
+CFLAGS  := $(ARCH) -std=gnu11 -O2 -Wall -Wextra -Wno-unused-function -Wno-format-truncation -Wstack-usage=16384 -ffunction-sections -fdata-sections \
            -D__SWITCH__ -D__SWITCH2__ \
            -I$(DEVKITPRO)/portlibs/switch2/include -I$(DEVKITPRO)/libounce/include -Isource
 LDFLAGS := $(ARCH) -specs=$(DEVKITPRO)/libounce/switch.specs -Wl,--gc-sections

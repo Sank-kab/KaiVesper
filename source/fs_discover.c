@@ -330,6 +330,14 @@ bool vesper_fs_discover(VesperKaihenCtx* kh, VesperFsDiscovery* out, bool keep_h
     }
 
     uint64_t* cands = (uint64_t*)malloc(MAX_CANDIDATES * sizeof(uint64_t));
+    if (!cands) {
+        free_snap(s1, out->cm_region_count);
+        free_snap(s2, out->cm_region_count);
+        fail(out, logf, "Out of memory allocating candidate buffer.");
+        vesper_fs_discovery_close(out);
+        if (logf) fclose(logf);
+        return false;
+    }
     size_t cand_count = 0;
     for (size_t r = 0; r < out->cm_region_count; r++) {
         for (size_t o = 0; o + 4 <= s1[r].size; o += 8) {
