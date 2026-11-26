@@ -24,7 +24,7 @@
 
 **KaiVesper** is a standalone native Switch 2 homebrew application (`1280×720` anti-aliased GUI with D-Pad, Analog Stick, and Touchscreen support) that manages unencrypted **Switch 2 (`SW2`)** and **Switch 1 (`SW1`)** `ExeFS` + `RomFS` profiles directly from the console — with **zero-reboot Hot-Swapping**, an automatic **Console Host scanner**, built-in **on-console `romfs.bin` packing**, and **per-profile Same-Account Save Isolation**.
 
-Pairs seamlessly with **[KaiVesper-Prep](https://github.com/Sank-kab/KaiVesper-Prep)** (native Windows zero-WSL preparation tool).
+Pairs seamlessly with **[KaiVesper-Prep](https://github.com/Sank-kab/KaiVesper-Prep)** (native Windows preparation tool).
 
 ---
 
@@ -121,7 +121,7 @@ On-console FS installation and zero-reboot Hot-Swapping require `ouncebrew/kaihe
 
 Open **[KaiVesper-Prep](https://github.com/Sank-kab/KaiVesper-Prep)** → **`kaiHEN (Patch & Launch)`** tab:
 1. Click **`Patch & Build kaiHEN`** — automatically downloads `ouncebrew/kaihen` (`20261117.1`) and the 3 `ro:dmnt` patches from `switch2-modbridge`, compiles them via Docker, and creates a ready-to-launch patched `kaiHEN` folder.
-2. Click **`Launch kaiHEN`** — automatically downloads `ns2jb` (`hen.cjs`) and launches your patched `kaiHEN` natively on Windows with a live SmileBASIC `V=START(...)` command banner!
+2. Click **`Launch kaiHEN`** — automatically downloads `ns2jb` (`hen.cjs`) and launches your patched `kaiHEN` through WSL2 (needs WSL2 + Node.js; mirrored networking recommended) with a live SmileBASIC `V=START(...)` command banner!
 
 ### Option B — Manual CLI Build (Linux / macOS / WSL)
 
