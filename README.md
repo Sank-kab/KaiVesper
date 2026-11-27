@@ -100,6 +100,8 @@ Pairs seamlessly with **[KaiVesper-Prep](https://github.com/Sank-kab/KaiVesper-P
 
 ## Troubleshooting
 
+- **"The software was closed because an error occurred" immediately on launch:**
+  Because KaiVesper preserves the Host title's signed `main.npdm`, the loaded game inherits that Host's `SystemResourceSize` and service permissions (`SAC`). Some lightweight, demo, or free-to-play / always-online titles have restricted memory or service policies and may fail to boot larger games. Switch to a full-sized offline retail Host marked **`Auto Logo (Best)`** in the **Hosts** tab — and make sure your game folder uses loose **`exefs/`** (without `main.npdm`) rather than a legacy Host-specific `exefs.nsp`.
 - **Nintendo / Switch logos remain overlaid while the game plays:**
   Your chosen Host title uses `logo_handling = Manual`. Open the **Hosts** tab in KaiVesper and choose a Host marked **`Auto Logo (Best)`**.
 - **Switch 1 game freezes on the boot logo:**
