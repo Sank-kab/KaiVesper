@@ -106,6 +106,8 @@ Pairs seamlessly with **[KaiVesper-Prep](https://github.com/Sank-kab/KaiVesper-P
   Make sure you selected a **64-bit Switch 1 Host** (`01...`) for 64-bit Switch 1 games (or a 32-bit Host for 32-bit titles), and use **KaiVesper-Prep** so any required `MountTemporaryStorage` `.ips32` patch is generated automatically.
 - **`Write failed: >4GB romfs.bin requires an exFAT microSD!`:**
   FAT32 cannot store files larger than 4 GiB. Use an exFAT-formatted microSD card for large games.
+- **`Save swap aborted: ... ([-] to bypass)` on secondary user accounts:**
+  Auto Save-Swap requires the selected Host title's save partition (`save:/`) to already exist for that user account. Launch the **Host title once normally** under that account so the console creates its initial save data, then close it — Auto Save-Swap will work on that account from then on (or press **`[-]`** to turn Auto Save-Swap OFF if you don't need save isolation).
 - **Stock `kaiHEN` detected:**
   On-console FS installation and zero-reboot Hot-Swapping require a patched `kaiHEN` build with the `ro:dmnt` FS helper primitives.
 - **Diagnostic Logs:**
