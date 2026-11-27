@@ -19,7 +19,7 @@ typedef struct {
     char name[96];
     bool is_switch1;
     bool has_sd_folder;
-    int8_t logo_handling; /* -1=unknown, 0=Auto (best Host), 1=Manual (may keep boot logo) */
+    int8_t logo_handling; /* -1=unknown, 0=Auto Logo, 1=Manual Logo (auto-patched by KaiVesper-Prep) */
 } VesperConsoleTitle;
 
 typedef struct {

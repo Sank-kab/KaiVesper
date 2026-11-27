@@ -356,7 +356,7 @@ static void render_games_view(uint32_t* fb, uint32_t sp,
         draw_card(fb, sp, LIST_X, LIST_Y, ROW_W, 210, 16, 1, COL_BORDER, COL_CARD, true);
         draw_text_aa(fb, sp, &FONT_MD, LIST_X + 36, LIST_Y + 34, "No games ready yet", COL_AMBER);
         draw_text_aa(fb, sp, &FONT_SM, LIST_X + 36, LIST_Y + 78,
-                     "1. Press [R] to open Hosts and pick your SW1 / SW2 Host title (Auto Logo recommended).", COL_TEXT);
+                     "1. Press [R] to open Hosts and pick your SW1 / SW2 Host title.", COL_TEXT);
         draw_text_aa(fb, sp, &FONT_SM, LIST_X + 36, LIST_Y + 110,
                      "2. Put games in /ns2jb-modloader/sw1/ or /sw2/ (or use KaiVesper Prep on Windows).", COL_MUTED);
         draw_text_aa(fb, sp, &FONT_SM, LIST_X + 36, LIST_Y + 144,
@@ -518,8 +518,8 @@ static void render_hosts_view(uint32_t* fb, uint32_t sp,
         int tx = LIST_X + 96;
         draw_text_trunc(fb, sp, &FONT_MD, tx, y + 16, t->name, COL_TEXT, 580);
 
-        const char* logo_tag = (t->logo_handling == 0) ? "  |  Auto Logo (Best)"
-                             : (t->logo_handling == 1) ? "  |  Manual Logo"
+        const char* logo_tag = (t->logo_handling == 0) ? "  |  Auto Logo"
+                             : (t->logo_handling == 1) ? "  |  Manual Logo (Prep auto-fix)"
                              : "";
         char sub[160];
         snprintf(sub, sizeof(sub), "ID: %s%s%s",
