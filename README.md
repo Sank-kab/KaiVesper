@@ -34,10 +34,10 @@ Pairs seamlessly with **[KaiVesper-Prep](https://github.com/Sank-kab/KaiVesper-P
   - **Games:**
     - Browse prepared Switch 2 (`SW2`) and Switch 1 (`SW1`) profiles.
     - One-press cold install into `FS` on first load, followed by **instant zero-reboot Hot-Swapping** between games within the same `kaiHEN` session.
-    - Supports packed `exefs.nsp` + `romfs.bin`, loose unencrypted `exefs/` (automatically preserving the Host's signed `main.npdm` and stubbing unused Host `subsdk*` modules), loose `romfs/` (auto-packed once into `romfs.bin` directly on-console with live progress!), and `exefs_patches/*.ips` / `.ips32`.
+    - Supports packed `exefs.nsp` + `romfs.bin`, loose unencrypted `exefs/` (automatically preserving the Host's signed `main.npdm` while dynamically merging unsigned `META` `SystemResourceSize` and `MainThreadStackSize` from `exefs/meta.bin` in RAM and stubbing unused Host `subsdk*` modules), loose `romfs/` (auto-packed once into `romfs.bin` directly on-console with live progress!), and `exefs_patches/*.ips` / `.ips32`.
   - **Hosts:**
     - Automatically enumerates installed Switch 1 (`01...`) and Switch 2 (`04...`) applications on your console (including FW 20/21+ compressed NACP titles and large Switch 2 control data).
-    - Displays **`Auto Logo (Best)`** vs **`Manual Logo`** compatibility next to each title so you can pick a Host that cleanly dismisses the Nintendo/Switch boot overlay.
+    - Displays **`Auto Logo`** vs **`Manual Logo (Prep auto-fix)`** next to each title (`KaiVesper-Prep` automatically injects a `FinishStartupLogo` micro-patch so Manual Logo Hosts also dismiss startup logos cleanly).
     - Pressing **`[A]`** selects your active `SW1` or `SW2` Host, persists it to `sdmc:/vesper/hosts.cfg`, and automatically creates the required folders on your microSD.
   - **Saves & System:**
     - **Same-Account Save Isolation:** automatically backs up and swaps `save:/` per profile on the same Switch 2 account, with atomic rename verification and a permanent, never-overwritten `_stock_initial_backup` on `sdmc:/vesper/saves/`.

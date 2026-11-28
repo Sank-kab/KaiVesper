@@ -43,13 +43,17 @@ static bool is_ignored(const char* name) {
            strcmp(name, "Thumbs.db") == 0;
 }
 
-static bool file_has_nso_magic(const char* path) {
+static bool file_has_magic4(const char* path, const char* expected) {
     FILE* f = fopen(path, "rb");
     if (!f) return false;
     uint8_t magic[4] = {0};
-    bool ok = (fread(magic, 1, 4, f) == 4 && memcmp(magic, "NSO0", 4) == 0);
+    bool ok = (fread(magic, 1, 4, f) == 4 && memcmp(magic, expected, 4) == 0);
     fclose(f);
     return ok;
+}
+
+static bool file_has_nso_magic(const char* path) {
+    return file_has_magic4(path, "NSO0");
 }
 
 static bool dir_has_any_entry(const char* path) {
@@ -97,7 +101,20 @@ static void scan_exefs_dir(VesperProfile* prof, const char* mount_dir, const cha
         char full[VESPER_MAX_PATH];
         snprintf(full, sizeof(full), "%s/%s", mount_dir, ent->d_name);
         struct stat st;
-        if (stat(full, &st) != 0 || !S_ISREG(st.st_mode) || st.st_size < 0x100) continue;
+        if (stat(full, &st) != 0 || !S_ISREG(st.st_mode)) continue;
+
+        /* Optional 128-byte unsigned META header (meta.bin) for automatic SystemResourceSize / Stack merge */
+        if (str_eq_ci(ent->d_name, "meta.bin")) {
+            if (st.st_size >= 0x80 && file_has_magic4(full, "META")) {
+                VesperExefsFile* ef = &prof->exefs_files[prof->exefs_file_count++];
+                snprintf(ef->name, sizeof(ef->name), "__meta.bin");
+                snprintf(ef->sd_path, sizeof(ef->sd_path), "%s/%s", rel_dir, ent->d_name);
+                ef->size = (uint64_t)st.st_size;
+            }
+            continue;
+        }
+
+        if (st.st_size < 0x100) continue;
         if (!file_has_nso_magic(full)) continue;
 
         VesperExefsFile* ef = &prof->exefs_files[prof->exefs_file_count++];

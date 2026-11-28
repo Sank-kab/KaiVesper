@@ -28,11 +28,13 @@ $(BUILD):
 $(BUILD)/%.o: source/%.c | $(BUILD)
 	$(PREFIX)gcc $(CFLAGS) -c $< -o $@
 
+$(BUILD)/fs_installer.o: source/runtime_templates.h
+
 $(BUILD)/$(TARGET).elf: $(OBJS)
 	$(PREFIX)gcc $(LDFLAGS) $^ $(LIBS) -o $@
 
 $(BUILD)/$(TARGET).nacp: Makefile | $(BUILD)
-	$(DEVKITPRO)/tools/bin/nacptool --create "KaiVesper" "sank-kab" "0.2.1-beta" $@
+	$(DEVKITPRO)/tools/bin/nacptool --create "KaiVesper" "sank-kab" "0.2.2-beta" $@
 
 $(TARGET).nro: $(BUILD)/$(TARGET).elf $(BUILD)/$(TARGET).nacp icon.jpg
 	$(DEVKITPRO)/tools/bin/elf2nro $< $@ --nacp=$(BUILD)/$(TARGET).nacp --icon=icon.jpg

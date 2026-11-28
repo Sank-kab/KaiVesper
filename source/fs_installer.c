@@ -443,7 +443,7 @@ static bool exefs_has_module(const VesperProfile* prof, const char* name) {
 
 static bool build_hotswap_region(uint64_t host_tid, const VesperProfile* prof,
                                  uint64_t ctx_addr, uint8_t* region_out, size_t region_cap,
-                                 size_t* out_used) {
+                                 size_t* out_used, FILE* logf) {
     HotswapRec* recs = (HotswapRec*)calloc(MAX_HOTSWAP_RECS, sizeof(HotswapRec));
     if (!recs) return false;
     size_t rec_count = 0;
@@ -565,6 +565,9 @@ static bool build_hotswap_region(uint64_t host_tid, const VesperProfile* prof,
         put_u64(region_out, f_off + 8,  sd_ptr);
         put_u64(region_out, f_off + 64, recs[i].size);
         put_u32(region_out, f_off + 72, recs[i].kind);
+        ilog(logf, "  rec[%zu] kind=%u size=%llu name=%s sd=%s",
+             i, recs[i].kind, (unsigned long long)recs[i].size,
+             recs[i].name, recs[i].has_sd_path ? recs[i].sd_path : "(none)");
     }
 
     free(recs);
@@ -574,7 +577,7 @@ static bool build_hotswap_region(uint64_t host_tid, const VesperProfile* prof,
 
 static uint8_t* build_ns2lfs02_context(uint64_t host_tid, const VesperProfile* prof,
                                        const VesperFsDiscovery* disc, const BuiltGateways* gw,
-                                       uint64_t ctx_addr, size_t* out_size) {
+                                       uint64_t ctx_addr, size_t* out_size, FILE* logf) {
     uint8_t* buf = (uint8_t*)calloc(1, (size_t)CTX_TOTAL_SIZE);
     if (!buf) return NULL;
 
@@ -621,7 +624,7 @@ static uint8_t* build_ns2lfs02_context(uint64_t host_tid, const VesperProfile* p
     put_u64(buf, a + 184, base + 0x107bc0ULL);
     put_u64(buf, a + 192, base + 0x107cd0ULL);
 
-    if (!build_hotswap_region(host_tid, prof, ctx_addr, buf + CTX_GAMES_OFF, CTX_HOTSWAP_MAX, NULL)) {
+    if (!build_hotswap_region(host_tid, prof, ctx_addr, buf + CTX_GAMES_OFF, CTX_HOTSWAP_MAX, NULL, logf)) {
         free(buf);
         return NULL;
     }
@@ -756,7 +759,7 @@ static bool vesper_fs_hotswap_profile(VesperKaihenCtx* kh, const VesperResidentS
     }
 
     size_t used = 0;
-    if (!build_hotswap_region(host_tid, prof, st->ctx_addr, new_region, CTX_HOTSWAP_MAX, &used)) {
+    if (!build_hotswap_region(host_tid, prof, st->ctx_addr, new_region, CTX_HOTSWAP_MAX, &used, logf)) {
         free(new_region); free(cur_region);
         ifail(logf, err_buf, err_len, "Profile manifest exceeds 16 KiB hot-swap buffer.");
         if (logf) fclose(logf);
@@ -979,7 +982,7 @@ bool vesper_fs_install_or_swap(VesperKaihenCtx* kh,
 
     /* Build and write NS2LFS02 manifest into ctx_addr */
     size_t built_ctx_sz = 0;
-    uint8_t* ctx_buf = build_ns2lfs02_context(host_tid, prof, &disc, &gw, ctx_addr, &built_ctx_sz);
+    uint8_t* ctx_buf = build_ns2lfs02_context(host_tid, prof, &disc, &gw, ctx_addr, &built_ctx_sz, logf);
     if (!ctx_buf || built_ctx_sz > ctx_size) {
         free(ctx_buf);
         ifail(logf, err_buf, err_len, "Context build failed (sz=0x%zx > 0x%llx).", built_ctx_sz, (unsigned long long)ctx_size);
